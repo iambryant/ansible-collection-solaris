@@ -8,9 +8,9 @@ None.
 
 ## Role Variables
 
-  ntp_servers:
-    - pool 0.pool.ntp.org iburst
-    - pool 1.pool.ntp.org iburst
+    ntp_servers:
+      - pool 0.pool.ntp.org iburst
+      - pool 1.pool.ntp.org iburst
 
 The list of NTP servers and burst modes to use. Defaults to `0.pool.ntp.org` and `1.pool.ntp.org` with the burst mode
 `iburst` set for both.
