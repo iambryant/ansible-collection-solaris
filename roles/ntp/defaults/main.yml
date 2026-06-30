@@ -1,0 +1,4 @@
+---
+ntp_servers:
+  - pool 0.pool.ntp.org iburst
+  - pool 1.pool.ntp.org iburst

@@ -1,0 +1,5 @@
+---
+- name: "Restart ntpd"
+  ansible.builtin.service:
+    name: svc:/network/ntp:default
+    state: restarted
