@@ -8,15 +8,15 @@ None.
 
 ## Role Variables
 
-    ai_dhcp_dns_servers: []
+    automated_installer_dhcp_dns_servers: []
 
 The list of DNS servers that Automated Installer clients will use.
 
-    ai_dhcp_domain_search: ""
+    automated_installer_dhcp_domain_search: ""
 
 The search domain that Automated Installer clients will use.
 
-    ai_dhcp_subnets: []
+    automated_installer_dhcp_subnets: []
 
 The list of subnets that Automated Installer clients will boot from. Supports the following parameters:
 
@@ -27,7 +27,7 @@ The list of subnets that Automated Installer clients will boot from. Supports th
 | `broadcast` | String  | **Yes**  | The broadcast address the subnet will use (e.g. 10.1.1.255).  |
 | `router`    | String  | **Yes**  | The router the subnet will use (e.g. 10.1.1.1).               |
 
-    ai_services: []
+    automated_installer_services: []
 
 The list of Automated Installer services to create. Supports the following parameters:
 
@@ -40,7 +40,7 @@ The list of Automated Installer services to create. Supports the following param
 
 Make sure to store the `file`, `manifest`, and `profile` files inside the `files/` directory adjacent to your playbook.
 
-    ai_clients: []
+    automated_installer_clients: []
 
 The list of Automated Installer clients to add. Supports the following parameters:
 

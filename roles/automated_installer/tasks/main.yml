@@ -11,45 +11,45 @@
     owner: root
     group: sys
     mode: '0644'
-  register: ai_dhcp_config
+  register: automated_installer_dhcp_config
 
 - name: "Ensure dhcpd is restarted"
   ansible.builtin.service:
     name: "svc:/network/dhcp/server:ipv4"
     state: restarted
-  when: ai_dhcp_config['changed']
+  when: automated_installer_dhcp_config['changed']
 
 - name: "Process Automated Installer services"
   ansible.builtin.include_tasks: create_service.yml
-  loop: "{{ ai_services }}"
+  loop: "{{ automated_installer_services }}"
   loop_control:
-    loop_var: ai_service
+    loop_var: automated_installer_service
 
 - name: "Get existing installadm clients"
   ansible.builtin.command: "installadm list -c"
-  register: ai_installadm_list
+  register: automated_installer_installadm_list
   changed_when: false
 
 - name: "Ensure clients are added to their specific services"
   ansible.builtin.command: >
     installadm create-client
-    -n {{ ai_client.service }}
-    -e {{ ai_client.mac }}
-  loop: "{{ ai_clients }}"
+    -n {{ automated_installer_client.service }}
+    -e {{ automated_installer_client.mac }}
+  loop: "{{ automated_installer_clients }}"
   loop_control:
-    loop_var: ai_client
+    loop_var: automated_installer_client
   when: >
     not (
-      ai_installadm_list.stdout
+      automated_installer_installadm_list.stdout
       is regex(
         '(?m)(?i)^'
-        ~ (ai_client.service | regex_escape)
+        ~ (automated_installer_client.service | regex_escape)
         ~ '\\s+'
-        ~ (ai_client.mac | regex_escape)
+        ~ (automated_installer_client.mac | regex_escape)
         ~ '\\b'
       )
     )
 
 - name: Print the installadm output text
   ansible.builtin.debug:
-    var: ai_installadm_list.stdout
+    var: automated_installer_installadm_list.stdout

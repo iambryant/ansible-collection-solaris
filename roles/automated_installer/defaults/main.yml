@@ -1,9 +1,9 @@
 ---
-ai_dhcp_dns_servers: []
-ai_dhcp_domain_search: ""
+automated_installer_dhcp_dns_servers: []
+automated_installer_dhcp_domain_search: ""
 
-ai_dhcp_subnets: []
+automated_installer_dhcp_subnets: []
 
-ai_services: []
+automated_installer_services: []
 
-ai_clients: []
+automated_installer_clients: []

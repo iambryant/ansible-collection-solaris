@@ -56,7 +56,7 @@
         installadm create-manifest
         -n {{ automated_installer_service.name }}
         -m default_manifest
-        -f /var/tmp/{{ automated_installer_service.manifest | basename}}
+        -f /var/tmp/{{ automated_installer_service.manifest | basename }}
         -d
       when: automated_installer_manifest_current['rc'] != 0
 
