@@ -1,107 +1,107 @@
 ---
-- name: "Ensure installation image ({{ ai_service.file }}) is copied"
+- name: "Ensure Automated Installer ISO is copied"
   ansible.builtin.copy:
-    src: "{{ ai_service.file }}"
-    dest: "/var/tmp/{{ ai_service.file | basename }}"
+    src: "{{ automated_installer_service.file }}"
+    dest: "/var/tmp/{{ automated_installer_service.file | basename }}"
     owner: root
     group: sys
     mode: '0644'
 
 - name: "Ensure bootstrap ISO is copied (UAR support only)"
   ansible.builtin.copy:
-    src: "{{ ai_service.bootstrap_iso }}"
-    dest: "/var/tmp/{{ ai_service.bootstrap_iso | basename}}"
+    src: "{{ automated_installer_service.bootstrap_iso }}"
+    dest: "/var/tmp/{{ automated_installer_service.bootstrap_iso | basename }}"
     owner: root
     group: sys
     mode: '0644'
-  when: ai_service.bootstrap_iso is defined
+  when: automated_installer_service.bootstrap_iso is defined
 
-- name: "Check if installadm ai_service '{{ ai_service.name }}' already exists"
-  ansible.builtin.command: "installadm list -n {{ ai_service.name }}"
-  register: ai_service_check
+- name: "Check if Automated Installer service already exists"
+  ansible.builtin.command: "installadm list -n {{ automated_installer_service.name }}"
+  register: automated_installer_service_check
   failed_when: false
   changed_when: false
 
-- name: "Ensure installadm service '{{ ai_service.name }}' is created"
+- name: "Ensure Automated Installer service is created"
   ansible.builtin.command: >
     installadm create-service
-    -n {{ ai_service.name }}
-    -s /var/tmp/{{ ai_service.file | basename }}
-    {% if ai_service.file is match('.*\.uar$') and ai_service.bootstrap_iso is defined %}
-    -i /var/tmp/{{ ai_service.bootstrap_iso | basename }}
+    -n {{ automated_installer_service.name }}
+    -s /var/tmp/{{ automated_installer_service.file | basename }}
+    {% if automated_installer_service.file is match('.*\.uar$') and automated_installer_service.bootstrap_iso is defined %}
+    -i /var/tmp/{{ automated_installer_service.bootstrap_iso | basename }}
     {% endif %}
     -y
-  when: ai_service_check['rc'] != 0
+  when: automated_installer_service_check['rc'] != 0
 
-- name: "Manage custom installadm manifests"
-  when: ai_service.manifest is defined
+- name: "Manage custom Automated Installer manifests"
+  when: automated_installer_service.manifest is defined
   block:
-    - name: "Get current manifest from installadm for '{{ ai_service.name }}'"
+    - name: "Get current manifest from installadm for '{{ automated_installer_service.name }}'"
       ansible.builtin.command: >
-        installadm export -n {{ ai_service.name }} -m default_manifest
-      register: ai_manifest_current
-      failed_when: ai_manifest_current.rc not in [0, 1]
+        installadm export -n {{ automated_installer_service.name }} -m default_manifest
+      register: automated_installer_manifest_current
+      failed_when: automated_installer_manifest_current.rc not in [0, 1]
       changed_when: false
 
     - name: "Ensure custom manifest is copied"
       ansible.builtin.copy:
-        src: "{{ ai_service.manifest }}"
-        dest: "/var/tmp/{{ ai_service.manifest | basename }}"
+        src: "{{ automated_installer_service.manifest }}"
+        dest: "/var/tmp/{{ automated_installer_service.manifest | basename }}"
         owner: root
         group: sys
         mode: '0600'
 
-    - name: "Ensure default manifest is added to '{{ ai_service.name }}'"
+    - name: "Ensure default manifest is added to '{{ automated_installer_service.name }}'"
       ansible.builtin.command: >
         installadm create-manifest
-        -n {{ ai_service.name }}
+        -n {{ automated_installer_service.name }}
         -m default_manifest
-        -f /var/tmp/{{ ai_service.manifest | basename}}
+        -f /var/tmp/{{ automated_installer_service.manifest | basename}}
         -d
-      when: ai_manifest_current['rc'] != 0
+      when: automated_installer_manifest_current['rc'] != 0
 
-    - name: "Ensure default manifest is updated for '{{ ai_service.name }}'"
+    - name: "Ensure default manifest is updated for '{{ automated_installer_service.name }}'"
       ansible.builtin.command: >
         installadm update-manifest
-        -n {{ ai_service.name }}
+        -n {{ automated_installer_service.name }}
         -m default_manifest
-        -f /var/tmp/{{ ai_service.manifest | basename }}
+        -f /var/tmp/{{ automated_installer_service.manifest | basename }}
       when:
-        - ai_manifest_current['rc'] == 0
-        - (ai_manifest_current.stdout | checksum != lookup('file', ai_service.manifest) | checksum)
+        - automated_installer_manifest_current['rc'] == 0
+        - (automated_installer_manifest_current.stdout | checksum != lookup('file', automated_installer_service.manifest) | checksum)
 
-- name: "Manage custom installadm profiles"
-  when: ai_service.profile is defined
+- name: "Manage custom Automated Installer profiles"
+  when: automated_installer_service.profile is defined
   block:
-    - name: "Get current profile from installadm for '{{ ai_service.name }}'"
+    - name: "Get current profile from installadm for '{{ automated_installer_service.name }}'"
       ansible.builtin.command: >
-        installadm export -n {{ ai_service.name }} -p default_profile
-      register: ai_profile_current
-      failed_when: ai_profile_current.rc not in [0, 1]
+        installadm export -n {{ automated_installer_service.name }} -p default_profile
+      register: automated_installer_profile_current
+      failed_when: automated_installer_profile_current.rc not in [0, 1]
       changed_when: false
 
     - name: "Ensure custom profile is copied"
       ansible.builtin.copy:
-        src: "{{ ai_service.profile }}"
-        dest: "/var/tmp/{{ ai_service.profile | basename }}"
+        src: "{{ automated_installer_service.profile }}"
+        dest: "/var/tmp/{{ automated_installer_service.profile | basename }}"
         owner: root
         group: sys
         mode: '0600'
 
-    - name: "Ensure default profile is added to '{{ ai_service.name }}'"
+    - name: "Ensure default profile is added to '{{ automated_installer_service.name }}'"
       ansible.builtin.command: >
         installadm create-profile
-        -n {{ ai_service.name }}
+        -n {{ automated_installer_service.name }}
         -p default_profile
-        -f /var/tmp/{{ ai_service.profile | basename }}
-      when: ai_profile_current['rc'] != 0
+        -f /var/tmp/{{ automated_installer_service.profile | basename }}
+      when: automated_installer_profile_current['rc'] != 0
 
-    - name: "Ensure default profile is updated for '{{ ai_service.name }}'"
+    - name: "Ensure default profile is updated for '{{ automated_installer_service.name }}'"
       ansible.builtin.command: >
         installadm update-profile
-        -n {{ ai_service.name }}
+        -n {{ automated_installer_service.name }}
         -p default_profile
-        -f /var/tmp/{{ ai_service.profile | basename }}
+        -f /var/tmp/{{ automated_installer_service.profile | basename }}
       when:
-        - ai_profile_current['rc'] == 0
-        - (ai_profile_current.stdout | checksum != lookup('file', ai_service.profile) | checksum)
+        - automated_installer_profile_current['rc'] == 0
+        - (automated_installer_profile_current.stdout | checksum != lookup('file', automated_installer_service.profile) | checksum)
