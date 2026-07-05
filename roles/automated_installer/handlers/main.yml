@@ -1,0 +1,5 @@
+---
+- name: "Ensure dhcpd is restarted"
+  ansible.builtin.service:
+    name: "svc:/network/dhcp/server:ipv4"
+    state: restarted
