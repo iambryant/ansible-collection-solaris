@@ -1,0 +1,45 @@
+# dhcpd.conf
+#
+# Configuration file for ISC dhcpd
+# {{ ansible_managed }}
+#
+
+default-lease-time 900;
+max-lease-time 86400;
+
+# If this DHCP server is the official DHCP server for the local
+# network, the authoritative directive should be uncommented.
+authoritative;
+
+# arch option for PXEClient
+option arch code 93 = unsigned integer 16;
+
+# Set logging facility (accompanies setting in syslog.conf)
+log-facility local7;
+
+# Global name services
+option domain-name-servers {{ ai_dhcp_dns_servers | join(', ') }};
+option domain-search "{{ ai_dhcp_domain_search }}";
+
+{% for network in ai_dhcp_subnets %}
+subnet {{ network.subnet }} netmask {{ network.netmask }} {
+  option broadcast-address {{ network.broadcast }};
+  option routers {{ network.router }};
+  next-server {{ ansible_facts['default_ipv4']['address'] }};
+  deny unknown-clients;
+}
+{% endfor %}
+
+class "WANBoot" {
+  match if not (substring(option vendor-class-identifier, 0, 9) = "PXEClient");
+  filename "http://{{ ansible_facts['default_ipv4']['address'] }}:5555/cgi-bin/wanboot-cgi";
+}
+
+{% for client in ai_clients %}
+host {{ client.name }} {
+  hardware ethernet {{ client.mac }};
+  fixed-address {{ client.ip }};
+  option host-name "{{ client.name }}";
+  option domain-name "{{ ai_dhcp_domain_search }}";
+}
+{% endfor %}

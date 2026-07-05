@@ -1,0 +1,55 @@
+---
+- name: "Ensure installadm is installed"
+  community.general.pkg5:
+    name: install/installadm
+    state: present
+
+- name: "Ensure dhcpd4.conf is rendered before creating services"
+  ansible.builtin.template:
+    src: dhcpd4.conf.j2
+    dest: /etc/inet/dhcpd4.conf
+    owner: root
+    group: sys
+    mode: '0644'
+  register: ai_dhcp_config
+
+- name: "Ensure dhcpd is restarted"
+  ansible.builtin.service:
+    name: "svc:/network/dhcp/server:ipv4"
+    state: restarted
+  when: ai_dhcp_config['changed']
+
+- name: "Process Automated Installer services"
+  ansible.builtin.include_tasks: create_service.yml
+  loop: "{{ ai_services }}"
+  loop_control:
+    loop_var: ai_service
+
+- name: "Get existing installadm clients"
+  ansible.builtin.command: "installadm list -c"
+  register: ai_installadm_list
+  changed_when: false
+
+- name: "Ensure clients are added to their specific services"
+  ansible.builtin.command: >
+    installadm create-client
+    -n {{ ai_client.service }}
+    -e {{ ai_client.mac }}
+  loop: "{{ ai_clients }}"
+  loop_control:
+    loop_var: ai_client
+  when: >
+    not (
+      ai_installadm_list.stdout
+      is regex(
+        '(?m)(?i)^'
+        ~ (ai_client.service | regex_escape)
+        ~ '\\s+'
+        ~ (ai_client.mac | regex_escape)
+        ~ '\\b'
+      )
+    )
+
+- name: Print the installadm output text
+  ansible.builtin.debug:
+    var: ai_installadm_list.stdout
