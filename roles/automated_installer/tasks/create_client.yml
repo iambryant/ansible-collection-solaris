@@ -1,3 +1,4 @@
+---
 - name: "Get existing installadm clients"
   ansible.builtin.command: "installadm list -c"
   register: automated_installer_installadm_list

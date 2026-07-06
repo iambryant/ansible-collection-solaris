@@ -68,7 +68,8 @@
         -f /var/tmp/{{ automated_installer_service.manifest | basename }}
       when:
         - automated_installer_manifest_current['rc'] == 0
-        - (automated_installer_manifest_current.stdout | checksum != lookup('file', automated_installer_service.manifest) | checksum)
+        - ( automated_installer_manifest_current.stdout | checksum !=
+            lookup('file', automated_installer_service.manifest) | checksum )
 
 - name: "Manage custom Automated Installer profiles"
   when: automated_installer_service.profile is defined
@@ -104,4 +105,5 @@
         -f /var/tmp/{{ automated_installer_service.profile | basename }}
       when:
         - automated_installer_profile_current['rc'] == 0
-        - (automated_installer_profile_current.stdout | checksum != lookup('file', automated_installer_service.profile) | checksum)
+        - ( automated_installer_profile_current.stdout | checksum !=
+            lookup('file', automated_installer_service.profile) | checksum )
