@@ -1,20 +1,20 @@
 ---
-- name: "Ensure Automated Installer ISO is copied"
+- name: "Ensure Automated Installer ISO file is copied"
   ansible.builtin.copy:
-    src: "{{ automated_installer_service.file }}"
-    dest: "/var/tmp/{{ automated_installer_service.file | basename }}"
+    src: "{{ automated_installer_service.iso_file }}"
+    dest: "/var/tmp/{{ automated_installer_service.iso_file | basename }}"
     owner: root
     group: sys
     mode: '0644'
 
-- name: "Ensure bootstrap ISO is copied (UAR support only)"
+- name: "Ensure Automated Installer UAR file is copied"
   ansible.builtin.copy:
-    src: "{{ automated_installer_service.bootstrap_iso }}"
-    dest: "/var/tmp/{{ automated_installer_service.bootstrap_iso | basename }}"
+    src: "{{ automated_installer_service.uar_file }}"
+    dest: "/var/tmp/{{ automated_installer_service.uar_file | basename }}"
     owner: root
     group: sys
     mode: '0644'
-  when: automated_installer_service.bootstrap_iso is defined
+  when: automated_installer_service.uar_file is defined
 
 - name: "Check if Automated Installer service already exists"
   ansible.builtin.command: "installadm list -n {{ automated_installer_service.name }}"
@@ -26,9 +26,9 @@
   ansible.builtin.command: >
     installadm create-service
     -n {{ automated_installer_service.name }}
-    -s /var/tmp/{{ automated_installer_service.file | basename }}
-    {% if automated_installer_service.file is match('.*\.uar$') and automated_installer_service.bootstrap_iso is defined %}
-    -i /var/tmp/{{ automated_installer_service.bootstrap_iso | basename }}
+    -s /var/tmp/{{ automated_installer_service.iso_file | basename }}
+    {% if automated_installer_service.uar_file is defined %}
+    -i /var/tmp/{{ automated_installer_service.uar_file | basename }}
     {% endif %}
     -y
   when: automated_installer_service_check['rc'] != 0

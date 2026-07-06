@@ -1,0 +1,21 @@
+- name: "Get existing installadm clients"
+  ansible.builtin.command: "installadm list -c"
+  register: automated_installer_installadm_list
+  changed_when: false
+
+- name: "Ensure clients are added to their specific services"
+  ansible.builtin.command: >
+    installadm create-client
+    -n {{ automated_installer_client.service }}
+    -e {{ automated_installer_client.mac }}
+  when: >
+    not (
+      automated_installer_installadm_list.stdout
+      is regex(
+        '(?m)(?i)^'
+        ~ (automated_installer_client.service | regex_escape)
+        ~ '\\s+'
+        ~ (automated_installer_client.mac | regex_escape)
+        ~ '\\b'
+      )
+    )

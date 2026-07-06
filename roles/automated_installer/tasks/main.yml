@@ -19,31 +19,8 @@
   loop_control:
     loop_var: automated_installer_service
 
-- name: "Get existing installadm clients"
-  ansible.builtin.command: "installadm list -c"
-  register: automated_installer_installadm_list
-  changed_when: false
-
-- name: "Ensure clients are added to their specific services"
-  ansible.builtin.command: >
-    installadm create-client
-    -n {{ automated_installer_client.service }}
-    -e {{ automated_installer_client.mac }}
+- name: "Process Automated Installer clients"
+  ansible.builtin.include_tasks: create_client.yml
   loop: "{{ automated_installer_clients }}"
   loop_control:
     loop_var: automated_installer_client
-  when: >
-    not (
-      automated_installer_installadm_list.stdout
-      is regex(
-        '(?m)(?i)^'
-        ~ (automated_installer_client.service | regex_escape)
-        ~ '\\s+'
-        ~ (automated_installer_client.mac | regex_escape)
-        ~ '\\b'
-      )
-    )
-
-- name: Print the installadm output text
-  ansible.builtin.debug:
-    var: automated_installer_installadm_list.stdout
