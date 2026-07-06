@@ -26,13 +26,13 @@ The list of subnets that Automated Installer clients will boot from. Supports th
 
 The list of Automated Installer services to create. Supports the following parameters:
 
-| Parameter  | Type    | Required | Description                                                                   |
-| :---       | :---    | :---     | :---                                                                          |
-| `name`     | String  | **Yes**  | The name of the Automated Installer service.                                  |
-| `iso_file` | String  | **Yes**  | The name of the Automated Installer ISO file to copy and use for the service. |
-| `uar_file` | String  | No       | The name of the UAR file to copy and use for the service.                     |
-| `manifest` | String  | **Yes**  | The name of the manifest to copy and use for the service.                     |
-| `profile`  | String  | **Yes**  | The name of the profile to copy and use for the service.                      |
+| Parameter  | Type    | Required | Description                                               |
+| :---       | :---    | :---     | :---                                                      |
+| `name`     | String  | **Yes**  | The name of the service.                                  |
+| `iso_file` | String  | **Yes**  | The name of the ISO file to copy and use for the service. |
+| `uar_file` | String  | No       | The name of the UAR file to copy and use for the service. |
+| `manifest` | String  | **Yes**  | The name of the manifest to copy and use for the service. |
+| `profile`  | String  | **Yes**  | The name of the profile to copy and use for the service.  |
 
 Make sure to store the `iso_file`, `uar_file`,  `manifest`, and `profile` files inside the `files/` directory adjacent
 to your playbook.
@@ -41,12 +41,12 @@ to your playbook.
 
 The list of Automated Installer clients to add. Supports the following parameters:
 
-| Parameter | Type    | Required | Description                                                          |
-| :---      | :---    | :---     | :---                                                                 |
-| `name`    | String  | **Yes**  | The name of the Automated Installer client.                          |
-| `mac`     | String  | **Yes**  | The mac address of the client.                                       |
-| `ip`      | String  | **Yes**  | The IP address to assign to the client.                              |
-| `service` | String  | **Yes**  | The name of the Automated Installer service to assign the client to. |
+| Parameter | Type    | Required | Description                                      |
+| :---      | :---    | :---     | :---                                             |
+| `name`    | String  | **Yes**  | The name of the client.                          |
+| `mac`     | String  | **Yes**  | The mac address of the client.                   |
+| `ip`      | String  | **Yes**  | The IP address to assign to the client.          |
+| `service` | String  | **Yes**  | The name of the service to assign the client to. |
 
 # Dependencies
 
@@ -58,6 +58,10 @@ None.
       become: true
       roles:
         - iambryant.solaris.automated_installer
+
+## TODO
+
+- Add option to specify path where ISO should be unpacked
 
 ## License
 
