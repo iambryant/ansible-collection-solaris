@@ -20,7 +20,7 @@ The list of subnets that Automated Installer clients will boot from. Supports th
 | `broadcast_address`   | String  | **Yes**  | The broadcast address the subnet will use (e.g. 10.1.1.255).  |
 | `domain_name_servers` | List    | **Yes**  | The DNS servers the subnet will use.                          |
 | `domain_name`         | String  | **Yes**  | The domain name the subnet will use.                          |
-| `domain_search`       | String  | **Yes**  | The search domain the subnet will use.                        |
+| `domain_search`       | List    | **Yes**  | The search domains the subnet will use.                       |
 
     automated_installer_services: []
 

@@ -26,8 +26,8 @@ subnet {{ network.subnet }} netmask {{ network.netmask }} {
   next-server {{ ansible_facts['default_ipv4']['address'] }};
 
   option domain-name-servers {{ network.domain_name_servers | join(', ') }};
-  option domain-name {{ network.domain_name }};
-  option domain-search {{ network.domain_search }};
+  option domain-name "{{ network.domain_name }}";
+  option domain-search {{ network.domain_search | map('regex_replace', '^(.*)$', '"\1"') | join(', ') }};
 
   deny unknown-clients;
 }
