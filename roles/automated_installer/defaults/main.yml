@@ -1,7 +1,4 @@
 ---
-automated_installer_dhcp_dns_servers: []
-automated_installer_dhcp_domain_search: ""
-
 automated_installer_dhcp_subnets: []
 
 automated_installer_services: []

@@ -17,15 +17,18 @@ option arch code 93 = unsigned integer 16;
 # Set logging facility (accompanies setting in syslog.conf)
 log-facility local7;
 
-# Global name services
-option domain-name-servers {{ automated_installer_dhcp_dns_servers | join(', ') }};
-option domain-search "{{ automated_installer_dhcp_domain_search }}";
 
 {% for network in automated_installer_dhcp_subnets %}
 subnet {{ network.subnet }} netmask {{ network.netmask }} {
-  option broadcast-address {{ network.broadcast }};
-  option routers {{ network.router }};
+  option routers {{ network.routers }};
+  option broadcast-address {{ network.broadcast_address }};
+
   next-server {{ ansible_facts['default_ipv4']['address'] }};
+
+  option domain-name-servers {{ network.domain_name_servers | join(', ') }};
+  option domain-name {{ network.domain_name }};
+  option domain-search {{ network.domain_search }};
+
   deny unknown-clients;
 }
 {% endfor %}
@@ -40,6 +43,5 @@ host {{ client.name }} {
   hardware ethernet {{ client.mac }};
   fixed-address {{ client.ip }};
   option host-name "{{ client.name }}";
-  option domain-name "{{ automated_installer_dhcp_domain_search }}";
 }
 {% endfor %}

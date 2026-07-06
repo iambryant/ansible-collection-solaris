@@ -8,24 +8,19 @@ None.
 
 ## Role Variables
 
-    automated_installer_dhcp_dns_servers: []
-
-The list of DNS servers that Automated Installer clients will use.
-
-    automated_installer_dhcp_domain_search: ""
-
-The search domain that Automated Installer clients will use.
-
     automated_installer_dhcp_subnets: []
 
 The list of subnets that Automated Installer clients will boot from. Supports the following parameters:
 
-| Parameter   | Type    | Required | Description                                                   |
-| :---        | :---    | :---     | :---                                                          |
-| `subnet`    | String  | **Yes**  | The DHCP subnet to create (e.g. 10.1.1.0).                    |
-| `netmask`   | String  | **Yes**  | The netmask to assign to the subnet (e.g. 255.255.255.0).     |
-| `broadcast` | String  | **Yes**  | The broadcast address the subnet will use (e.g. 10.1.1.255).  |
-| `router`    | String  | **Yes**  | The router the subnet will use (e.g. 10.1.1.1).               |
+| Parameter             | Type    | Required | Description                                                   |
+| :---                  | :---    | :---     | :---                                                          |
+| `subnet`              | String  | **Yes**  | The DHCP subnet to create (e.g. 10.1.1.0).                    |
+| `netmask`             | String  | **Yes**  | The netmask to assign to the subnet (e.g. 255.255.255.0).     |
+| `router`              | String  | **Yes**  | The router the subnet will use (e.g. 10.1.1.1).               |
+| `broadcast_address`   | String  | **Yes**  | The broadcast address the subnet will use (e.g. 10.1.1.255).  |
+| `domain_name_servers` | List    | **Yes**  | The DNS servers the subnet will use.                          |
+| `domain_name`         | String  | **Yes**  | The domain name the subnet will use.                          |
+| `domain_search`       | String  | **Yes**  | The search domain the subnet will use.                        |
 
     automated_installer_services: []
 
