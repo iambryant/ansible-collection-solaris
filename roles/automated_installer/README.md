@@ -34,11 +34,13 @@ The list of Automated Installer services to create. Supports the following param
 | Parameter  | Type    | Required | Description                                                                   |
 | :---       | :---    | :---     | :---                                                                          |
 | `name`     | String  | **Yes**  | The name of the Automated Installer service.                                  |
-| `file`     | String  | **Yes**  | The name of the Automated Installer ISO file to copy and use for the service. |
+| `iso_file` | String  | **Yes**  | The name of the Automated Installer ISO file to copy and use for the service. |
+| `uar_file` | String  | No       | The name of the UAR file to copy and use for the service.                     |
 | `manifest` | String  | **Yes**  | The name of the manifest to copy and use for the service.                     |
 | `profile`  | String  | **Yes**  | The name of the profile to copy and use for the service.                      |
 
-Make sure to store the `file`, `manifest`, and `profile` files inside the `files/` directory adjacent to your playbook.
+Make sure to store the `iso_file`, `uar_file`,  `manifest`, and `profile` files inside the `files/` directory adjacent
+to your playbook.
 
     automated_installer_clients: []
 
