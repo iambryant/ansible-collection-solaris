@@ -72,6 +72,7 @@
         - automated_installer_manifest_current['rc'] == 0
         - ( automated_installer_manifest_current.stdout | checksum !=
             lookup('file', automated_installer_service.manifest) | checksum )
+      changed_when: true
 
 - name: "Manage custom Automated Installer profiles"
   when: automated_installer_service.profile is defined
@@ -110,3 +111,4 @@
         - automated_installer_profile_current['rc'] == 0
         - ( automated_installer_profile_current.stdout | checksum !=
             lookup('file', automated_installer_service.profile) | checksum )
+      changed_when: true
