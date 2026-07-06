@@ -32,6 +32,7 @@
     {% endif %}
     -y
   when: automated_installer_service_check['rc'] != 0
+  changed_when: true
 
 - name: "Manage custom Automated Installer manifests"
   when: automated_installer_service.manifest is defined
@@ -59,6 +60,7 @@
         -f /var/tmp/{{ automated_installer_service.manifest | basename }}
         -d
       when: automated_installer_manifest_current['rc'] != 0
+      changed_when: true
 
     - name: "Ensure default manifest is updated for '{{ automated_installer_service.name }}'"
       ansible.builtin.command: >
@@ -96,6 +98,7 @@
         -p default_profile
         -f /var/tmp/{{ automated_installer_service.profile | basename }}
       when: automated_installer_profile_current['rc'] != 0
+      changed_when: true
 
     - name: "Ensure default profile is updated for '{{ automated_installer_service.name }}'"
       ansible.builtin.command: >
