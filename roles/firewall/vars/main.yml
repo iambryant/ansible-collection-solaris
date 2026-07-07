@@ -1,0 +1,5 @@
+---
+firewall_service: "svc:/network/firewall:default"
+firewall_package: "network/firewall"
+firewall_config_file: "/etc/firewall/pf.conf"
+firewall_config_include_dir: "/etc/firewall.d"

@@ -1,21 +1,20 @@
 ---
 - name: "Ensure firewall is installed"
   community.general.pkg5:
-    name: "network/firewall"
+    name: "{{ firewall_package }}"
     state: present
 
 - name: "Ensure pf.conf has include for {{ firewall_conf_name }}"
   ansible.builtin.lineinfile:
-    path: /etc/firewall/pf.conf
-    line: 'include "/etc/firewall.d/{{ firewall_conf_name }}"'
+    path: "{{ firewall_config_file }}"
+    line: 'include "{{ firewall_config_include_dir }}/{{ firewall_conf_name }}"'
     state: present
-    validate: '/usr/sbin/pfctl -nf %s'
-  notify: Refresh firewall
+  notify: "Refresh firewall"
 
-- name: "Ensure pf.conf.ansible is rendered"
+- name: "Ensure global.conf is rendered"
   ansible.builtin.template:
     src: global.conf
-    dest: "/etc/firewall.d/{{ firewall_conf_name }}"
+    dest: "{{ firewall_config_include_dir }}/{{ firewall_conf_name }}"
     owner: root
     group: sys
     mode: '0644'

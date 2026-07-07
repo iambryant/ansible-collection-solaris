@@ -1,5 +1,5 @@
 ---
 - name: "Restart firewall"
   ansible.builtin.service:
-    name: "svc:/network/firewall:default"
+    name: "{{ firewall_service }}"
     state: restarted
