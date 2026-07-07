@@ -7,7 +7,7 @@
 - name: "Ensure pf.conf.ansible is rendered"
   ansible.builtin.template:
     src: pf.conf.ansible.j2
-    dest: /etc/firewalld/pf.conf.ansible.j2
+    dest: /etc/firewall.d/pf.conf.ansible.j2
     owner: root
     group: sys
     mode: '0644'
