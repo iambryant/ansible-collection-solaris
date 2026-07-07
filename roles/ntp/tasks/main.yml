@@ -1,4 +1,9 @@
 ---
+- name: "Ensure ntp is installed"
+  community.general.pkg5:
+    name: "service/network/ntp"
+    state: present
+
 - name: "Ensure ntp.conf is rendered"
   ansible.builtin.template:
     src: ntp.conf.j2
@@ -6,10 +11,10 @@
     owner: root
     group: sys
     mode: '0644'
-  notify: Restart ntpd
+  notify: "Restart ntp"
 
-- name: "Ensure ntpd is enabled"
+- name: "Ensure ntp is enabled"
   ansible.builtin.service:
-    name: svc:/network/ntp:default
+    name: "svc:/network/ntp:default"
     state: started
     enabled: true

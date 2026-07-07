@@ -23,7 +23,7 @@ None.
 
   - `iambryant.solaris.ntp` ([documentation](https://github.com/iambryant/ansible-collection-solaris/blob/main/roles/ntp/README.md))
   - `iambryant.solaris.automated_installer` ([documentation](https://github.com/iambryant/ansible-collection-solaris/blob/main/roles/automated_installer/README.md))
-
+  - `iambryant.solaris.firewall` ([documentation](https://github.com/iambryant/ansible-collection-solaris/blob/main/roles/firewall/README.md))
 ## Usage
 
 To see an example of this collection's usage, see: https://github.com/iambryant/solaris-dev-playbook.

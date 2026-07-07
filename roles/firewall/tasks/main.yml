@@ -1,0 +1,20 @@
+---
+- name: "Ensure firewall is installed"
+  community.general.pkg5:
+    name: "network/firewall"
+    state: present
+
+- name: "Ensure pf.conf.ansible is rendered"
+  ansible.builtin.template:
+    src: pf.conf.ansible.j2
+    dest: /etc/firewalld/pf.conf.ansible.j2
+    owner: root
+    group: sys
+    mode: '0644'
+  notify: "Restart firewall"
+
+- name: "Ensure firewall is enabled"
+  ansible.builtin.service:
+    name: "svc:/network/firewall:default"
+    state: started
+    enabled: true

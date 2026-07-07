@@ -1,0 +1,5 @@
+---
+- name: "Ensure firewall is restarted"
+  ansible.builtin.service:
+    name: "svc:/network/firewall:default"
+    state: restarted

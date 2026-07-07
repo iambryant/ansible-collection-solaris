@@ -1,6 +1,7 @@
 # Ansible Role: NTP
 
-This role configures NTP as per Oracle's [documentation](https://docs.oracle.com/cd/E37838_01/html/E61003/time-4.html#scrolltoc).
+This role configures NTP as per Oracle's
+[documentation](https://docs.oracle.com/cd/E37838_01/html/E61003/time-4.html#scrolltoc).
 
 ## Requirements
 

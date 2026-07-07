@@ -1,0 +1,24 @@
+# {{ ansible_managed }}
+
+# accept incoming SSH connections
+pass in proto tcp to any port 22
+
+# allow DHCP do its work - incoming messages
+pass in inet proto udp from port 67 to port 68
+pass in inet6 proto udp from port 547 to port 546
+
+# packet too big - needed for PMTUD
+pass in inet6 proto ipv6-icmp icmp6-type 2
+
+# router advertisment
+pass in inet6 proto ipv6-icmp icmp6-type 134
+
+# neighbor solicitation
+pass in inet6 proto ipv6-icmp icmp6-type 135
+
+# neighbor advertisment
+pass in inet6 proto ipv6-icmp icmp6-type 136
+
+# allow all connections initiated from this machine, this
+# includes e.g. DHCP requests
+pass out
