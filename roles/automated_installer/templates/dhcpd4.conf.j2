@@ -27,7 +27,7 @@ subnet {{ network.subnet }} netmask {{ network.netmask }} {
 
   option domain-name-servers {{ network.domain_name_servers | join(', ') }};
   option domain-name "{{ network.domain_name }}";
-  option domain-search {{ network.domain_search | map('regex_replace', '^(.*)$', '"\1"') | join(', ') }};
+  option domain-search {{ network.domain_search | map('format', '"%s"') | join(', ') }};
 
   deny unknown-clients;
 }
