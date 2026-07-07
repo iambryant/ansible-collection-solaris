@@ -4,13 +4,6 @@
     name: "{{ firewall_package }}"
     state: present
 
-- name: "Ensure pf.conf has include for {{ firewall_conf_name }}"
-  ansible.builtin.lineinfile:
-    path: "{{ firewall_config_file }}"
-    line: 'include "{{ firewall_config_include_dir }}/{{ firewall_conf_name }}"'
-    state: present
-  notify: "Refresh firewall"
-
 - name: "Ensure global.conf is rendered"
   ansible.builtin.template:
     src: global.conf
@@ -18,6 +11,13 @@
     owner: root
     group: sys
     mode: '0644'
+  notify: "Restart firewall"
+
+- name: "Ensure pf.conf has include for {{ firewall_conf_name }}"
+  ansible.builtin.lineinfile:
+    path: "{{ firewall_config_file }}"
+    line: 'include "{{ firewall_config_include_dir }}/{{ firewall_conf_name }}"'
+    state: present
   notify: "Restart firewall"
 
 - name: "Ensure firewall is enabled"
