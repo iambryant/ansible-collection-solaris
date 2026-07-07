@@ -4,10 +4,18 @@
     name: "network/firewall"
     state: present
 
+- name: "Ensure pf.conf has include for {{ firewall_conf_name }}"
+  ansible.builtin.lineinfile:
+    path: /etc/firewall/pf.conf
+    line: 'include "/etc/firewall.d/{{ firewall_conf_name }}"'
+    state: present
+    validate: '/usr/sbin/pfctl -nf %s'
+  notify: Refresh firewall
+
 - name: "Ensure pf.conf.ansible is rendered"
   ansible.builtin.template:
-    src: global.conf.j2
-    dest: /etc/firewall.d/pf.conf.ansible.j2
+    src: global.conf
+    dest: "/etc/firewall.d/{{ firewall_conf_name }}"
     owner: root
     group: sys
     mode: '0644'
