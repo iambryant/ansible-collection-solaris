@@ -6,7 +6,7 @@
 
 - name: "Ensure global.conf is rendered"
   ansible.builtin.template:
-    src: global.conf
+    src: global.conf.j2
     dest: "{{ firewall_config_include_dir }}/{{ firewall_conf_name }}"
     owner: root
     group: sys
