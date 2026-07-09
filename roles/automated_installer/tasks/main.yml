@@ -4,6 +4,8 @@
     name: install/installadm
     state: present
 
+# On a new install, this will report "changed" on a second run
+# despite nothing being changed. Probably an ACL quirk.
 - name: "Ensure dhcpd4.conf is rendered before creating services"
   ansible.builtin.template:
     src: dhcpd4.conf.j2
