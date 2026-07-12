@@ -4,9 +4,9 @@
     name: "{{ firewall_package }}"
     state: present
 
-- name: "Ensure global.conf is rendered"
+- name: "Ensure base.conf is rendered"
   ansible.builtin.template:
-    src: global.conf.j2
+    src: base.conf.j2
     dest: "{{ firewall_config_include_dir }}/{{ firewall_conf_name }}"
     owner: root
     group: sys
