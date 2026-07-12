@@ -1,7 +1,7 @@
 # {{ ansible_managed }}
 
-{% if solaris_pf_use_default_rules %}
-{% for rule in solaris_pf_default_rules %}
+{% if firewall_use_default_rules %}
+{% for rule in firewall_default_rules %}
 {% if rule.comment is defined %}
 # {{ rule.comment }}
 {% endif %}
@@ -9,13 +9,13 @@
 
 {% endfor %}
 {% endif %}
-{% for rule in solaris_pf_custom_rules %}
+{% for rule in firewall_custom_rules %}
 {% if rule.comment is defined %}
 # {{ rule.comment }}
 {% endif %}
 {{ rule.action }} proto {{ rule.proto }}{% if rule.port is defined %} to any port {{ rule.port }}{% endif %}
 
 {% endfor %}
-{% if solaris_pf_raw_rules | length > 0 %}
-{{ solaris_pf_raw_rules }}
+{% if firewall_raw_rules | length > 0 %}
+{{ firewall_raw_rules }}
 {% endif %}
