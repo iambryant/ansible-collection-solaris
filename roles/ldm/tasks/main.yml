@@ -1,4 +1,9 @@
 ---
+- name: "Check if primary domain is already in delayed reconfiguration mode"
+  ansible.builtin.command: "ldm list-domain -o status primary"
+  register: ldm_current_status
+  changed_when: false
+
 - name: "Get current SP config for primary domain"
   ansible.builtin.command: "ldm list -p primary"
   register: ldm_current_config
@@ -9,12 +14,14 @@
     ldm_current_cores: >
       {{ ((ldm_current_config.stdout | regex_search('ncpu=[0-9]+')).split('=')[1] | int / 8) | int }}
     ldm_current_mem: >
-      {{ ((ldm_current_config.stdout | regex_search('mem=[0-9]+')).split('=')[1] | int / 1024 / 1024) | int }}
+      {{ ((ldm_current_config.stdout | regex_search('mem=[0-9]+')).split('=')[1] | int / 1024 / 1024 / 1024) | int }}
 
 - name: "Ensure CPU cores and RAM are assigned to primary domain"
-  when: >
+  when:
+  - >
     ldm_current_cores != (ldm_primary_cores | int) or
-    ldm_current_mem != ((ldm_primary_mem | int) * 1024)
+    ldm_current_mem != (ldm_primary_mem | int)
+  - "'delayed' not in ldm_current_status.stdout"
   notify: Save SP config
   block:
     - name: "Start delayed reconfiguration mode"
