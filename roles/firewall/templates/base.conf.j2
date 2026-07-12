@@ -1,24 +1,23 @@
 # {{ ansible_managed }}
 
-# accept incoming SSH connections
-pass in proto tcp to any port 22
+{% for rule in firewall_default_rules %}
+{% if rule.comment is defined %}
+# {{ rule.comment }}
+{% endif %}
+{{ rule.action }}{% if rule.proto is defined %}{% if 'inet6' in rule.proto %} inet6{% endif %} proto {{ rule.proto | replace('inet6-', '') }}{% if rule.from_port is defined %} from port {{ rule.from_port }}{% endif %} {% if rule.port is defined %}to any port {{ rule.port }}{% elif rule.type is defined %}icmp6-type {{ rule.type }}{% endif %}{% endif %}
 
-# allow DHCP do its work - incoming messages
-pass in inet proto udp from port 67 to port 68
-pass in inet6 proto udp from port 547 to port 546
+{% endfor %}
 
-# packet too big - needed for PMTUD
-pass in inet6 proto ipv6-icmp icmp6-type 2
+{% for rule in firewall_custom_rules %}
+{% if rule.comment is defined %}
+# {{ rule.comment }}
+{% endif %}
+{{ rule.action }} proto {{ rule.proto }}{% if rule.port is defined %} to any port {{ rule.port }}{% endif %}
+{% endfor %}
 
-# router advertisment
-pass in inet6 proto ipv6-icmp icmp6-type 134
+{% if firewall_raw_rules | length > 0 %}
+{{ firewall_raw_rules }}
+{% endif %}
 
-# neighbor solicitation
-pass in inet6 proto ipv6-icmp icmp6-type 135
-
-# neighbor advertisment
-pass in inet6 proto ipv6-icmp icmp6-type 136
-
-# allow all connections initiated from this machine, this
-# includes e.g. DHCP requests
+# allow all connections initiated from this machine
 pass out

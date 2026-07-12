@@ -9,7 +9,9 @@ None.
 
 ## Role Variables
 
-None.
+    firewall_conf_name: base.conf
+
+The name of the drop-in firewall config that PF will use. Defaults to `base.conf`.
 
 ## Dependencies
 
