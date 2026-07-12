@@ -1,6 +1,6 @@
 # {{ ansible_managed }}
 
-{% if firewall_use_default_rules %}
+{% if solaris_pf_default_rules | length > 0 %}
 {% for rule in firewall_default_rules %}
 {% if rule.comment is defined %}
 # {{ rule.comment }}
