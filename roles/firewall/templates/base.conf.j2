@@ -1,20 +1,21 @@
 # {{ ansible_managed }}
 
-{% for rule in firewall_default_rules %}
+{% if solaris_pf_use_default_rules %}
+{% for rule in solaris_pf_default_rules %}
 {% if rule.comment is defined %}
 # {{ rule.comment }}
 {% endif %}
-{{ rule.action }}{% if rule.proto is defined %}{% if 'inet6' in rule.proto %} inet6{% endif %} proto {{ rule.proto | replace('inet6-', '') }}{% if rule.from_port is defined %} from port {{ rule.from_port }}{% endif %} {% if rule.port is defined %}to any port {{ rule.port }}{% elif rule.type is defined %}icmp6-type {{ rule.type }}{% endif %}{% endif %}
+{{ rule.action }}{% if rule.family is defined %} {{ rule.family }}{% endif %}{% if rule.proto is defined %} proto {{ rule.proto }}{% endif %}{% if rule.from_port is defined %} from port {{ rule.from_port }}{% endif %} {% if rule.port is defined %}to any port {{ rule.port }}{% elif rule.type is defined %}icmp6-type {{ rule.type }}{% endif %}
 
 {% endfor %}
-
-{% for rule in firewall_custom_rules %}
+{% endif %}
+{% for rule in solaris_pf_custom_rules %}
 {% if rule.comment is defined %}
 # {{ rule.comment }}
 {% endif %}
 {{ rule.action }} proto {{ rule.proto }}{% if rule.port is defined %} to any port {{ rule.port }}{% endif %}
-{% endfor %}
 
-{% if firewall_raw_rules | length > 0 %}
-{{ firewall_raw_rules }}
+{% endfor %}
+{% if solaris_pf_raw_rules | length > 0 %}
+{{ solaris_pf_raw_rules }}
 {% endif %}
