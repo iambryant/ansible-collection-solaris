@@ -1,4 +1,9 @@
 ---
+- name: "Ensure the target system is SPARC (sun4v) architecture"
+  ansible.builtin.fail:
+    msg: "This role requires the SPARC sun4v architecture to function. Detected: {{ ansible_architecture }}"
+  when: ansible_architecture != 'sun4v'
+
 - name: "Check if primary domain is already in delayed reconfiguration mode"
   ansible.builtin.command: "ldm list-domain -o status primary"
   register: ldm_current_status
