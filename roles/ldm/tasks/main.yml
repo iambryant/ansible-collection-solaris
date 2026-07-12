@@ -18,11 +18,11 @@
 
 - name: "Ensure CPU cores and RAM are assigned to primary domain"
   when:
-  - >
-    ldm_current_cores != (ldm_primary_cores | int) or
-    ldm_current_mem != (ldm_primary_mem | int)
-  - "'delayed' not in ldm_current_status.stdout"
-  notify: Save SP config
+    - >
+      ldm_current_cores != (ldm_primary_cores | int) or
+      ldm_current_mem != (ldm_primary_mem | int)
+    - "'delayed' not in ldm_current_status.stdout"
+  notify: "Save SP config"
   block:
     - name: "Start delayed reconfiguration mode"
       ansible.builtin.command: "ldm start-reconf primary"
