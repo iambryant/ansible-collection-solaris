@@ -12,14 +12,15 @@
     group: sys
     mode: '0644'
     validate: /usr/sbin/pfctl -nf %s
-  notify: "Restart firewall"
+  notify: "Reload firewall"
 
 - name: "Ensure pf.conf has include for {{ firewall_conf_name }}"
   ansible.builtin.lineinfile:
     path: "{{ firewall_config_file }}"
+    regexp: '^include "{{ firewall_config_include_dir }}/.*"'
     line: 'include "{{ firewall_config_include_dir }}/{{ firewall_conf_name }}"'
     state: present
-  notify: "Restart firewall"
+  notify: "Reload firewall"
 
 - name: "Ensure firewall is enabled"
   ansible.builtin.service:
