@@ -1,15 +1,17 @@
 ---
-- name: Gather raw LDM primary domain properties
-  ansible.builtin.shell: "ldm list -p primary"
+- name: "Get current SP config for primary domain"
+  ansible.builtin.command: "ldm list -p primary"
   register: ldm_current_config
   changed_when: false
 
-- name: Extract exact core and memory values
+- name: "Get currently assigned CPU cores and RAM for primary domain"
   ansible.builtin.set_fact:
-    ldm_current_cores: "{{ ((ldm_current_config.stdout | regex_search('ncpu=[0-9]+')).split('=')[1] | int / 8) | int }}"
-    ldm_current_mem: "{{ ((ldm_current_config.stdout | regex_search('mem=[0-9]+')).split('=')[1] | int / 1024 / 1024) | int }}"
+    ldm_current_cores:
+      {{ ((ldm_current_config.stdout | regex_search('ncpu=[0-9]+')).split('=')[1] | int / 8) | int }}
+    ldm_current_mem:
+      {{ ((ldm_current_config.stdout | regex_search('mem=[0-9]+')).split('=')[1] | int / 1024 / 1024) | int }}
 
-- name: Reconfigure Control Domain Resources
+- name:
   when: >
     ldm_current_cores != (ldm_primary_cores | int) or
     ldm_current_mem != ((ldm_primary_mem | int) * 1024)
@@ -17,9 +19,12 @@
   block:
     - name: Enter Delayed Reconfiguration Mode
       ansible.builtin.command: "ldm start-reconf primary"
+      changed_when: true
 
     - name: Set Strict CPU Core Constraint
       ansible.builtin.command: "ldm set-core {{ ldm_primary_cores }} primary"
+      changed_when: true
 
     - name: Set Strict Memory Size Constraint
       ansible.builtin.command: "ldm set-memory {{ ldm_primary_mem }}G primary"
+      changed_when: true
