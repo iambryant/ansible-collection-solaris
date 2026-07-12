@@ -1,4 +1,0 @@
----
-- name: "Save SP config"
-  ansible.builtin.command: "ldm add-spconfig {{ ldm_spconfig_name }}"
-  changed_when: true

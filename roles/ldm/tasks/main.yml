@@ -4,9 +4,14 @@
   register: ldm_current_status
   changed_when: false
 
-- name: "Get current SP config for primary domain"
+- name: "Get current SP configuration for primary domain"
   ansible.builtin.command: "ldm list -p primary"
   register: ldm_current_config
+  changed_when: false
+
+- name: "Check if the SP configuration actually exists on the SP"
+  ansible.builtin.command: "ldm list-spconfig"
+  register: ldm_existing_config
   changed_when: false
 
 - name: "Get currently assigned CPU cores and RAM for primary domain"
@@ -16,22 +21,34 @@
     ldm_current_mem: >
       {{ ((ldm_current_config.stdout | regex_search('mem=[0-9]+')).split('=')[1] | int / 1024 / 1024 / 1024) | int }}
 
-- name: "Ensure CPU cores and RAM are assigned to primary domain"
+- name: "Ensure SP configuration is present"
   when:
     - >
       ldm_current_cores != (ldm_primary_cores | int) or
-      ldm_current_mem != (ldm_primary_mem | int)
+      ldm_current_mem != (ldm_primary_mem | int) or
+      ldm_spconfig_name not in ldm_existing_config.stdout
     - "'delayed' not in ldm_current_status.stdout"
-  notify: "Save SP config"
   block:
     - name: "Start delayed reconfiguration mode"
       ansible.builtin.command: "ldm start-reconf primary"
+      when: ldm_current_cores != (ldm_primary_cores | int) or ldm_current_mem != (ldm_primary_mem | int)
       changed_when: true
 
     - name: "Ensure CPU cores are assigned to primary domain"
       ansible.builtin.command: "ldm set-core {{ ldm_primary_cores }} primary"
+      when: ldm_current_cores != (ldm_primary_cores | int)
       changed_when: true
 
     - name: "Ensure RAM is assigned to primary domain"
       ansible.builtin.command: "ldm set-memory {{ ldm_primary_mem }}G primary"
+      when: ldm_current_mem != (ldm_primary_mem | int)
+      changed_when: true
+
+    - name: "Remove existing SP configuration if it exists"
+      ansible.builtin.command: "ldm remove-spconfig {{ ldm_spconfig_name }}"
+      when: ldm_spconfig_name in ldm_existing_config.stdout
+      changed_when: true
+
+    - name: "Ensure new SP configuration is added"
+      ansible.builtin.command: "ldm add-spconfig {{ ldm_spconfig_name }}"
       changed_when: true
