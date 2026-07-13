@@ -73,14 +73,17 @@
 - name: "Ensure Virtual Console Concentrator (VCC) service is preent"
   ansible.builtin.command: >
     ldm add-vcc port-range=5000-5100 {{ ldm_vcc_name }} primary
+  changed_when: true
   when: ldm_vcc_name not in ldm_current_services.stdout
 
 - name: "Ensure Virtual Disk Server (VDS) service is present"
   ansible.builtin.command: >
     ldm add-vds {{ ldm_vdsname }} primary
+  changed_when: true
   when: ldm_vds_name not in ldm_current_services.stdout
 
 - name: "Ensure Virtual Switch (VSW) service is present"
   ansible.builtin.command: >
     ldm add-vsw net-dev={{ ldm_vswitch_lan }} {{ ldm_vswitch_name }} primary
+  changed_when: true
   when: ldm_vswitch_name not in ldm_current_services.stdout
