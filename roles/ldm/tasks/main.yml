@@ -4,7 +4,7 @@
     msg: "This role requires the SPARC sun4v architecture to function. Detected: {{ ansible_facts['architecture'] }}"
   when: ansible_facts['architecture'] != 'sun4v'
 
-- name: "Ensure LDM/Oracle VM Server for SPARC is installed"
+- name: "Ensure Logical Domains Manager/Oracle VM Server for SPARC is installed"
   community.general.pkg5:
     name:
       - system/ldoms
@@ -87,3 +87,9 @@
     ldm add-vsw net-dev={{ ldm_vsw_lan }} {{ ldm_vsw_name }} primary
   changed_when: true
   when: ldm_vsw_name not in ldm_current_services.stdout
+
+- name: "Ensure the virtual network terminal server daemon (vntsd) is enabled"
+  ansible.builtin.service:
+    name: "svc:/ldoms/vntsd:default"
+    state: started
+    enabled: true

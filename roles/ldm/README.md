@@ -1,6 +1,6 @@
 # Ansible Role: LDM
 
-This role configures LDM/Oracle VM Server for SPARC as per Oracle's
+This role configures Logical Domains Manager/Oracle VM Server for SPARC as per Oracle's
 [documentation](https://docs.oracle.com/en/virtualization/oracle-vm-server-sparc/ldoms-admin/).
 
 ## Requirements
