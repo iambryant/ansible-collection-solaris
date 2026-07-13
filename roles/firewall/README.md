@@ -17,14 +17,17 @@ The name of the drop-in firewall config that PF will use. Defaults to `base.conf
 
 The list of rules to add to the drop-in firewall config. Supports the following parameters:
 
-| Parameter | Type    | Required | Description                                           |
-| :---      | :---    | :---     | :---                                                  |
-| `action`  | String  | **Yes**  | The action to take for the rule.                      |
-| `comment` | String  | **No**   | A short description of what the rule does.            |
-| `proto`   | String  | **Yes**  | The protocol to use for the rule (e.g. `tcp`, `udp`). |
-| `from_ip` | String  | **No**   | The source IP/subnet to allow for the rule.           |
-| `to_ip`   | String  | **No**   | The destination IP/subnet to allow for the rule.      |
-| `port`    | Integer | **Yes**  | The port to use for the rule.                         |
+| Parameter   | Type     | Required | Description                                                    |
+| :---        | :---     | :---     | :---                                                           |
+| `action`    | String   | **Yes**  | The action to take for the rule.                               |
+| `family`    | String   | No       | The address family to use for the rule (e.g. `inet`, `inet6`). |
+| `proto`     | String   | **Yes**  | The protocol to use for the rule (e.g. `tcp`, `udp`).          |
+| `from_ip`   | String   | No       | The source IP/subnet to allow for the rule.                    |
+| `from_port` | String   | No       | The source port to allow for the rule.                         |
+| `to_ip`     | String   | No       | The destination IP/subnet to allow for the rule.               |
+| `to_port`   | String   | **Yes**  | The destination port to allow for the rule.                    |
+| `type`      | Integer  | Cond.    | Need to address this.                                          |
+| `comment`   | String   | No       | A short description of what the rule does.                     |
 
     firewall_rules_raw: ""
 
