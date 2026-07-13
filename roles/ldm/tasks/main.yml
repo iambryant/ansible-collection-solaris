@@ -2,7 +2,7 @@
 - name: "Ensure the target system is SPARC (sun4v) architecture"
   ansible.builtin.fail:
     msg: "This role requires the SPARC sun4v architecture to function. Detected: {{ ansible_facts['architecture'] }}"
-  when: ansible_architecture != 'sun4v'
+  when: ansible_facts['architecture'] != 'sun4v'
 
 - name: "Ensure LDM/Oracle VM Server for SPARC is installed"
   community.general.pkg5:
@@ -78,7 +78,7 @@
 
 - name: "Ensure Virtual Disk Server (VDS) service is present"
   ansible.builtin.command: >
-    ldm add-vds {{ ldm_vdsname }} primary
+    ldm add-vds {{ ldm_vds_name }} primary
   changed_when: true
   when: ldm_vds_name not in ldm_current_services.stdout
 
