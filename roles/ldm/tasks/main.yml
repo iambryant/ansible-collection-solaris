@@ -84,6 +84,6 @@
 
 - name: "Ensure Virtual Switch (VSW) service is present"
   ansible.builtin.command: >
-    ldm add-vsw net-dev={{ ldm_vswitch_lan }} {{ ldm_vswitch_name }} primary
+    ldm add-vsw net-dev={{ ldm_vsw_lan }} {{ ldm_vsw_name }} primary
   changed_when: true
-  when: ldm_vswitch_name not in ldm_current_services.stdout
+  when: ldm_vsw_name not in ldm_current_services.stdout

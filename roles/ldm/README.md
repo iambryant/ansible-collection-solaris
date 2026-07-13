@@ -25,6 +25,26 @@ The amount of RAM (in gigabytes) to set for the primary/control domain. Defaults
 
 The name to assign to the SP profile after CPU cores and RAM have been assigned. Defaults to `base-config`.
 
+    ldm_vcc_name: "primary-vcc0"
+
+The name of the default Virtual Console Concentrator service that LDOMs will use. Defaults to `primary-vcc0`.
+
+    ldm_vds_name: "primary-vds0"
+
+The name of the default Virtual Disk Server service that LDOMs will use. Defaults to `primary-vds0`.
+
+    ldm_vsw_name: "primary-vsw0"
+
+The name of the default Virtual Switch service that LDOMs will use. Defaults to `primary-vsw0`.
+
+    ldm_vsw_lan: "net0"
+
+The interface to bind the Virtual Switch service to. Defaults to `net0`.
+
+    ldm_guests: []
+
+The list of guests to be created. Supports the following parameters:
+
 ## Dependencies
 
 None.
