@@ -2,6 +2,11 @@
 ldm_primary_cores: 2
 ldm_primary_mem: 16
 
-ldm_spconfig_name: "base_config"
+ldm_spconfig_name: "base-config"
+
+ldm_vswitch_lan: "net0"
+ldm_vswitch_name: "primary-vsw0"
+ldm_vcc_name: "primary-vcc0"
+ldm_vds_name: "primary-vds0"
 
 ldm_instances: []

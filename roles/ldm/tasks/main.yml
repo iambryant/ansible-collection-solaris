@@ -4,6 +4,13 @@
     msg: "This role requires the SPARC sun4v architecture to function. Detected: {{ ansible_facts['architecture'] }}"
   when: ansible_architecture != 'sun4v'
 
+- name: "Ensure LDM/Oracle VM Server for SPARC is installed"
+  community.general.pkg5:
+    name:
+      - system/ldoms
+      - system/ldoms/ldomsmanager
+    state: present
+
 - name: "Check if primary domain is already in delayed reconfiguration mode"
   ansible.builtin.command: "ldm list-domain -o status primary"
   register: ldm_current_status
@@ -57,3 +64,23 @@
     - name: "Ensure new SP configuration is added"
       ansible.builtin.command: "ldm add-spconfig {{ ldm_spconfig_name }}"
       changed_when: true
+
+- name: "Get current LDOM services status"
+  ansible.builtin.command: ldm list-services -p primary
+  register: ldm_current_services
+  changed_when: false
+
+- name: "Ensure Virtual Console Concentrator (VCC) service is preent"
+  ansible.builtin.command: >
+    ldm add-vcc port-range=5000-5100 {{ ldm_vcc_name }} primary
+  when: ldm_vcc_name not in ldm_current_services.stdout
+
+- name: "Ensure Virtual Disk Server (VDS) service is present"
+  ansible.builtin.command: >
+    ldm add-vds {{ ldm_vdsname }} primary
+  when: ldm_vds_name not in ldm_current_services.stdout
+
+- name: "Ensure Virtual Switch (VSW) service is present"
+  ansible.builtin.command: >
+    ldm add-vsw net-dev={{ ldm_vswitch_lan }} {{ ldm_vswitch_name }} primary
+  when: ldm_vswitch_name not in ldm_current_services.stdout
