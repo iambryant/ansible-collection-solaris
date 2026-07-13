@@ -1,17 +1,6 @@
 ---
 firewall_conf_name: base.conf
 
-firewall_default_rules:
-  - { action: "block in all", comment: "Default drop policy for all incoming traffic" }
-  - { action: "pass in", proto: "tcp", port: 22, comment: "Allow SSH in" }
-  - { action: "pass in", family: "inet", proto: "udp", from_port: 67, port: 68, comment: "Allow DHCPv4 in" }
-  - { action: "pass in", family: "inet6", proto: "udp", from_port: 547, port: 546, comment: "Allow DHCPv6 in" }
-  - { action: "pass in", family: "inet6", proto: "ipv6-icmp", type: 2, comment: "PMTUD (Packet too big)" }
-  - { action: "pass in", family: "inet6", proto: "ipv6-icmp", type: 134, comment: "Router advertisement" }
-  - { action: "pass in", family: "inet6", proto: "ipv6-icmp", type: 135, comment: "Neighbor solicitation" }
-  - { action: "pass in", family: "inet6", proto: "ipv6-icmp", type: 136, comment: "Neighbor advertisement" }
-  - { action: "pass out", comment: "Default allow policy for all outbound traffic" }
+firewall_rules: []
 
-firewall_custom_rules: []
-
-firewall_raw_rules: ""
+firewall_rules_raw: ""
