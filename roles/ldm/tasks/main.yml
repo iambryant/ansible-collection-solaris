@@ -13,21 +13,36 @@
 
 - name: "Get LDOM facts and configurations"
   block:
-    - name: "Check primary domain status and services"
-      ansible.builtin.command: |
-        ldm list-domain -o status primary;
-        ldm list -p primary;
-        ldm list-spconfig;
-        ldm list-services -p primary
-      register: ldm_raw_info
+    - name: "Get current primary domain status"
+      ansible.builtin.command: "ldm list-domain -o status primary"
+      become: true
+      register: ldm_current_status
       changed_when: false
 
-    - name: "Parse LDOM state into structured variables"
+    - name: "Get current primary domain configuration"
+      ansible.builtin.command: "ldm list -p primary"
+      become: true
+      register: ldm_current_config
+      changed_when: false
+
+    - name: "Get current SP configurations"
+      ansible.builtin.command: "ldm list-spconfig"
+      become: true
+      register: ldm_current_spconfig
+      changed_when: false
+
+    - name: "Get current primary domain services"
+      ansible.builtin.command: "ldm list-services -p primary"
+      become: true
+      register: ldm_current_services
+      changed_when: false
+
+    - name: "Ensure primary domain details are set as facts"
       ansible.builtin.set_fact:
-        ldm_status_output: "{{ ldm_raw_info.stdout_lines[0] }}"
-        ldm_config_output: "{{ ldm_raw_info.stdout_lines[1] }}"
-        ldm_spconfigs: "{{ ldm_raw_info.stdout_lines[2] }}"
-        ldm_services: "{{ ldm_raw_info.stdout_lines[3:] | join('\n') }}"
+        ldm_status_output: "{{ ldm_current_status.stdout }}"
+        ldm_config_output: "{{ ldm_current_config.stdout }}"
+        ldm_spconfigs: "{{ ldm_current_spconfig.stdout }}"
+        ldm_services: "{{ ldm_current_services.stdout }}"
 
     - name: "Get currently assigned CPU cores and RAM for primary domain"
       ansible.builtin.set_fact:
@@ -57,7 +72,6 @@
       notify: "Rebuild SP config"
 
 - name: "Ensure SP configuration is present"
-  # This block only triggers if resource modifications are needed AND the primary is not already in delayed reconf.
   when:
     - "ldm_current_cores != (ldm_primary_cores | int) or ldm_current_mem != (ldm_primary_mem | int)"
     - "'delayed' not in ldm_status_output"
