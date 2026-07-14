@@ -10,7 +10,7 @@ DOCUMENTATION = r"""
 module: solaris_ldom
 short_description: Manage Solaris LDOMs (Logical Domains)
 description:
-  - Create, start, stop, and destroy Solaris LDOMs.
+  - Create, start, stop, and remove Solaris LDOMs.
   This module does not currently allow changing of options for a LDOM that is already been created.
 author:
   - Your Name (@iambryant)
@@ -32,7 +32,7 @@ options:
       - V(present): Configure the LDOM, set CPU/Memory, and bind resources.
       - V(running): Ensure the LDOM is created, bound, and started.
       - V(stopped): Stop/halt a running LDOM.
-      - V(absent): Stop, unbind, and destroy the LDOM.
+      - V(absent): Stop, unbind, and remove the LDOM.
     type: str
     choices: [absent, present, running, stopped]
     default: present
@@ -66,7 +66,7 @@ EXAMPLES = r"""
     name: ldom-web1
     state: stopped
 
-- name: Destroy an LDOM entirely
+- name: Remove an LDOM entirely
   solaris_ldom:
     name: ldom-web1
     state: absent
@@ -187,12 +187,12 @@ class Ldom:
         self.changed = True
         self.msg.append(f"LDOM {self.name} unbound")
 
-    def destroy(self):
-        """Destroys the domain."""
+    def remove(self):
+        """Removes the domain."""
         if not self.module.check_mode:
-            self.run_ldm_cmd(["destroy-domain", self.name], "Failed to destroy LDOM")
+            self.run_ldm_cmd(["remove-domain", self.name], "Failed to remove LDOM")
         self.changed = True
-        self.msg.append(f"LDOM {self.name} destroyed")
+        self.msg.append(f"LDOM {self.name} removed")
 
     # State machine logic
     def enforce_state(self):
@@ -212,8 +212,8 @@ class Ldom:
             if info and info.get("state") == "bound":
                 self.unbind()
 
-            # Now we can destroy
-            self.destroy()
+            # Now we can remove
+            self.remove()
 
         elif self.state in ["present", "running", "stopped"]:
             if not info:
