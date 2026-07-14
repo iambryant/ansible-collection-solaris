@@ -1,11 +1,11 @@
 ---
-- name: "Rebuild SP config"
-  block:
-    - name: "Remove existing SP configuration if it exists"
-      ansible.builtin.command: "ldm remove-spconfig {{ ldm_spconfig_name }}"
-      changed_when: true
-      when: "ldm_spconfig_name in ldm_spconfigs"
+- name: "Remove existing SP configuration if it exists"
+  ansible.builtin.command: "ldm remove-spconfig {{ ldm_spconfig_name }}"
+  changed_when: true
+  when: "ldm_spconfig_name in ldm_spconfigs"
+  listen: "Rebuild SP config"
 
-    - name: "Ensure new SP configuration is added"
-      ansible.builtin.command: "ldm add-spconfig {{ ldm_spconfig_name }}"
-      changed_when: true
+- name: "Ensure new SP configuration is added"
+  ansible.builtin.command: "ldm add-spconfig {{ ldm_spconfig_name }}"
+  changed_when: true
+  listen: "Rebuild SP config"
