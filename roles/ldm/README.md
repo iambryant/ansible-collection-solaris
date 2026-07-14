@@ -18,7 +18,7 @@ The amount of CPU cores to set for the primary/control domain. Defaults to `2`.
 The amount of RAM (in gigabytes) to set for the primary/control domain. Defaults to `16`.
 
 > [!NOTE]
-> Changes are done in delayed reconfiguration mode. It is your reponsibility to reboot the machine after
+> Changes are done in delayed reconfiguration mode. It is your reponsibility to power-cycle the machine after
 > changes are made.
 
     ldm_spconfig_name: "base-config"
