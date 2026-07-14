@@ -1,3 +1,4 @@
+---
 - name: "Ensure the target system is SPARC (sun4v) architecture"
   ansible.builtin.fail:
     msg: "This role requires the SPARC sun4v architecture to function. Detected: {{ ansible_facts['architecture'] }}"
@@ -39,16 +40,19 @@
   block:
     - name: "Ensure Virtual Console Concentrator (VCC) service is present"
       ansible.builtin.command: "ldm add-vcc port-range=5000-5100 {{ ldm_vcc_name }} primary"
+      changed_when: true
       when: "ldm_vcc_name not in ldm_services"
       notify: "Rebuild SP config"
 
     - name: "Ensure Virtual Disk Server (VDS) service is present"
       ansible.builtin.command: "ldm add-vds {{ ldm_vds_name }} primary"
+      changed_when: true
       when: "ldm_vds_name not in ldm_services"
       notify: "Rebuild SP config"
 
     - name: "Ensure Virtual Switch (VSW) service is present"
       ansible.builtin.command: "ldm add-vsw net-dev={{ ldm_vsw_lan }} {{ ldm_vsw_name }} primary"
+      changed_when: true
       when: "ldm_vsw_name not in ldm_services"
       notify: "Rebuild SP config"
 
@@ -60,14 +64,17 @@
   block:
     - name: "Start delayed reconfiguration mode"
       ansible.builtin.command: "ldm start-reconf primary"
+      changed_when: true
 
     - name: "Ensure CPU cores are assigned to primary domain"
       ansible.builtin.command: "ldm set-core {{ ldm_primary_cores }} primary"
+      changed_when: true
       when: "ldm_current_cores != (ldm_primary_cores | int)"
       notify: "Rebuild SP config"
 
     - name: "Ensure RAM is assigned to primary domain"
       ansible.builtin.command: "ldm set-memory {{ ldm_primary_mem }}G primary"
+      changed_when: true
       when: "ldm_current_mem != (ldm_primary_mem | int)"
       notify: "Rebuild SP config"
 
