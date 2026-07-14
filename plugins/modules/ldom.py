@@ -11,7 +11,7 @@ module: ldom
 short_description: Manage Solaris LDOMs (Logical Domains)
 description:
   - Create, start, stop, and remove Solaris LDOMs.
-  This module does not currently allow changing of options for a LDOM that is already been created.
+    This module does not currently allow changing of options for a LDOM that has already been created.
 author:
   - Your Name (@iambryant)
 requirements:
@@ -150,11 +150,9 @@ class Ldom:
             self.run_ldm_cmd(["add-vcpu", str(self.vcpu), self.name], "Failed to add vcpus")
             # 3. Add memory
             self.run_ldm_cmd(["add-memory", self.memory, self.name], "Failed to add memory")
-            # --- MODIFICATION AREA ---
-            # This is where you would add your default network (vnet) and virtual disk (vdisk) configurations.
-            # Example:
+            # 4. Add vnets
+            # Not implemented yet
             # self.run_ldm_cmd(["add-vnet", "vnet1", "primary-vsw0", self.name], "Failed to add vnet")
-            # -------------------------
 
         self.changed = True
         self.msg.append(f"LDOM {self.name} created")
