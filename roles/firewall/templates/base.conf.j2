@@ -4,7 +4,7 @@
 {% if rule.comment is defined %}
 # {{ rule.comment }}
 {% endif %}
-{{ rule.action }}{% if rule.family is defined %} {{ rule.family }}{% endif %}{% if rule.proto is defined %} proto {{ rule.proto }}{% endif %} from {{ rule.from_ip | default('any') }}{% if rule.from_port is defined %} port {{ rule.from_port }}{% endif %} to {{ rule.to_ip | default('any') }}{% if rule.to_port is defined %} port {{ rule.to_port }}{% elif rule.type is defined %} icmp6-type {{ rule.type }}{% endif %}
+{{ rule.action }}{% if rule.family is defined %} {{ rule.family }}{% endif %}{% if rule.proto is defined %} proto {{ rule.proto }}{% endif %} from {{ rule.from_ip | default('any') }}{% if rule.from_port is defined %} port {{ rule.from_port }}{% endif %} to {{ rule.to_ip | default('any') }}{% if rule.to_port is defined %} port {{ rule.to_port }}{% if rule.options is defined %} {{ rule.options }}{% endif %}
 
 {% endfor %}
 {% if firewall_rules_raw | length > 0 %}
