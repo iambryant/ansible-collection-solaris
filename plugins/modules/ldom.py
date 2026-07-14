@@ -7,7 +7,7 @@
 from __future__ import annotations
 
 DOCUMENTATION = r"""
-module: solaris_ldom
+module: ldom
 short_description: Manage Solaris LDOMs (Logical Domains)
 description:
   - Create, start, stop, and remove Solaris LDOMs.
@@ -50,24 +50,24 @@ options:
 
 EXAMPLES = r"""
 - name: Ensure LDOM exists and is configured
-  solaris_ldom:
+  iambryant.solaris.ldom:
     name: ldom-web1
     state: present
     vcpu: 16
     memory: 8G
 
 - name: Start an LDOM
-  solaris_ldom:
+  iambryant.solaris.ldom:
     name: ldom-web1
     state: running
 
 - name: Stop an LDOM
-  solaris_ldom:
+  iambryant.solaris.ldom:
     name: ldom-web1
     state: stopped
 
 - name: Remove an LDOM entirely
-  solaris_ldom:
+  iambryant.solaris.ldom:
     name: ldom-web1
     state: absent
 """

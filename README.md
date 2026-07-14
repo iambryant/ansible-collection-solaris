@@ -19,6 +19,10 @@ collections:
 
 None.
 
+## Included Modules
+
+  - `iambryant.solaris.ldom`
+
 ## Included Roles
 
   - `iambryant.solaris.automated_installer` ([documentation](https://github.com/iambryant/ansible-collection-solaris/blob/main/roles/automated_installer/README.md))
