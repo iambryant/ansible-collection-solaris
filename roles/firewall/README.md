@@ -21,11 +21,11 @@ The list of rules to add to the drop-in firewall config. Supports the following 
 | :---        | :---     | :---     | :---                                                                |
 | `action`    | String   | **Yes**  | The action to take for the rule.                                    |
 | `family`    | String   | No       | The address family to use for the rule (e.g. `inet`, `inet6`).      |
-| `proto`     | String   | **Yes**  | The protocol to use for the rule (e.g. `tcp`, `udp`).               |
+| `proto`     | String   | No       | The protocol to use for the rule (e.g. `tcp`, `udp`).               |
 | `from_ip`   | String   | No       | The source IP/subnet to allow for the rule.                         |
 | `from_port` | String   | No       | The source port to allow for the rule.                              |
 | `to_ip`     | String   | No       | The destination IP/subnet to allow for the rule.                    |
-| `to_port`   | String   | **Yes**  | The destination port to allow for the rule.                         |
+| `to_port`   | String   | No       | The destination port to allow for the rule.                         |
 | `options`   | String   | No       | Options to add to the end of the rule (e.g. icmp-type, icmp6-type). |
 | `comment`   | String   | No       | A short description of what the rule does.                          |
 
