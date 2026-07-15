@@ -1,4 +1,6 @@
 ---
+ldm_allow_reboot: false
+
 ldm_primary_cores: 2
 ldm_primary_mem: 16
 

@@ -9,6 +9,11 @@ None.
 
 ## Role Variables
 
+    ldm_allow_reboot: false
+
+Whether or not to reboot after changes are made in delayed reconfiguration mode. Must be set to `true` if you plan to use the 
+`iambryant.solaris.ldom` module after this role.
+
     ldm_primary_cores: 2
 
 The amount of CPU cores to set for the primary/control domain. Defaults to `2`.

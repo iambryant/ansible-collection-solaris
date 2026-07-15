@@ -97,3 +97,10 @@
     name: "svc:/ldoms/vntsd:default"
     state: started
     enabled: true
+
+- name: "Reboot to apply SP configuration"
+  ansible.builtin.reboot:
+    reboot_timeout: 900
+  when:
+    - "'delayed' in ldm_status_output"
+    - ldm_allow_reboot | bool
