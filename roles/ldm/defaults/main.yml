@@ -10,5 +10,3 @@ ldm_vcc_name: "primary-vcc0"
 ldm_vds_name: "primary-vds0"
 ldm_vsw_name: "primary-vsw0"
 ldm_vsw_lan: "net0"
-
-ldm_guests: []

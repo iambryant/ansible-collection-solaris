@@ -46,10 +46,6 @@ The name of the default Virtual Switch service that LDOMs will use. Defaults to 
 
 The interface to bind the Virtual Switch service to. Defaults to `net0`.
 
-    ldm_guests: []
-
-The list of guests to be created. Supports the following parameters:
-
 ## Dependencies
 
 None.
