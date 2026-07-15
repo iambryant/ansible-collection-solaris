@@ -2,4 +2,4 @@
 - name: "Reload firewall"
   ansible.builtin.service:
     name: "{{ firewall_service }}"
-    state: reloaded # Restarted can be used, but that will drop existing SSH connections
+    state: restarted
