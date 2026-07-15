@@ -46,8 +46,8 @@ None.
 
 ## TODO
 
-Fix issue where defining `block in all` instead of just `block in` breaks the template since
-`from any to any` is appended when `from_ip`/`to_ip` aren't defined.
+- Fix issue where defining shorthand like `block in all` or `pass in all` breaks the template since
+  `from any to any` is appended when `from_ip`/`to_ip` aren't defined.
 
 ## License
 

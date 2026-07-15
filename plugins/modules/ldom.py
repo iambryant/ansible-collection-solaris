@@ -13,7 +13,7 @@ description:
   - Create, start, stop, and remove Solaris LDOMs.
     This module does not currently allow changing of options for a LDOM that has already been created.
 author:
-  - Your Name (@iambryant)
+  - iambryant
 requirements:
   - Solaris 10 or 11 on SPARC
 attributes:
