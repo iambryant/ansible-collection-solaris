@@ -11,8 +11,11 @@ None.
 
     ldm_allow_reboot: false
 
-Whether or not to reboot after changes are made in delayed reconfiguration mode. Must be set to `true` if you plan to use the 
-`iambryant.solaris.ldom` module after this role.
+Whether or not to reboot after changes are made in delayed reconfiguration mode. Defaults to `false`.
+
+> [!NOTE]
+> Must be set to `true` if you plan to use the `iambryant.solaris.ldom` module immediately after this role. LDOMs cannot be created
+> while the primary/control domain is in delayed reconfiguration mode.
 
     ldm_primary_cores: 2
 
@@ -23,8 +26,7 @@ The amount of CPU cores to set for the primary/control domain. Defaults to `2`.
 The amount of RAM (in gigabytes) to set for the primary/control domain. Defaults to `16`.
 
 > [!NOTE]
-> Changes are done in delayed reconfiguration mode. It is your reponsibility to power-cycle the machine after
-> changes are made.
+> Changes are done in delayed reconfiguration mode. It is your reponsibility to power-cycle the machine after changes are made.
 
     ldm_spconfig_name: "base-config"
 
