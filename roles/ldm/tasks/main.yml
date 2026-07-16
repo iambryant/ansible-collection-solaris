@@ -67,7 +67,7 @@
       when: "ldm_vsw_name not in ldm_services"
       register: ldm_vsw_reg
 
-- name: "Ensure SP configuration is present"
+- name: "Ensure primary/control domain is configured"
   when:
     - "ldm_current_cores != (ldm_primary_cores | int) or ldm_current_mem != (ldm_primary_mem | int)"
     - "'delayed' not in ldm_status_output"
@@ -75,6 +75,7 @@
     - name: "Start delayed reconfiguration mode"
       ansible.builtin.command: "ldm start-reconf primary"
       changed_when: true
+      register: ldm_reconf_started
 
     - name: "Ensure CPU cores are assigned to primary domain"
       ansible.builtin.command: "ldm set-core {{ ldm_primary_cores }} primary"
@@ -115,5 +116,5 @@
   ansible.builtin.reboot:
     reboot_timeout: 900
   when:
-    - "'delayed' in ldm_status_output"
+    - ldm_reconf_started is defined and ldm_reconf_started is changed
     - ldm_allow_reboot | bool
