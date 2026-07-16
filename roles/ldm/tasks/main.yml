@@ -1,4 +1,3 @@
----
 - name: "Ensure the target system is SPARC (sun4v) architecture"
   ansible.builtin.fail:
     msg: "This role requires the SPARC sun4v architecture to function. Detected: {{ ansible_facts['architecture'] }}"
@@ -75,7 +74,6 @@
     - name: "Start delayed reconfiguration mode"
       ansible.builtin.command: "ldm start-reconf primary"
       changed_when: true
-      register: ldm_reconf_started
 
     - name: "Ensure CPU cores are assigned to primary domain"
       ansible.builtin.command: "ldm set-core {{ ldm_primary_cores }} primary"
@@ -112,9 +110,15 @@
       ansible.builtin.command: "ldm add-spconfig {{ ldm_spconfig_name }}"
       changed_when: true
 
-- name: "Reboot to apply SP configuration"
-  ansible.builtin.reboot:
-    reboot_timeout: 900
-  when:
-    - ldm_reconf_started is defined and ldm_reconf_started is changed
-    - ldm_allow_reboot | bool
+- name: "Handle system reboot to apply changes"
+  when: "ldm_allow_reboot | bool"
+  block:
+    - name: "Check if primary domain needs to be rebooted"
+      ansible.builtin.command: "ldm list-domain -o status primary"
+      register: ldm_reboot_check
+      changed_when: false
+
+    - name: "Ensure primary domain is rebooted to apply SP configuration"
+      ansible.builtin.reboot:
+        reboot_timeout: 900
+      when: "'delayed' in ldm_reboot_check.stdout"
