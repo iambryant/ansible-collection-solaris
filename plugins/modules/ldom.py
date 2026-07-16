@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# Copyright (c) 2026, iambryant
+# Copyright (c) 2026, Bryant A
 # MIT License (see LICENSE or https://opensource.org/licenses/MIT)
 # SPDX-License-Identifier: MIT
 
@@ -13,7 +13,7 @@ description:
   - Create, start, stop, and remove Solaris LDOMs.
     This module does not currently allow changing of options for a LDOM that has already been created.
 author:
-  - iambryant
+  - Bryant A (@iambryant)
 requirements:
   - Solaris 10 or 11 on SPARC
 attributes:
