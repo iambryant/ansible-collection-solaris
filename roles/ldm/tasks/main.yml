@@ -123,3 +123,9 @@
       ansible.builtin.reboot:
         reboot_timeout: 900
       when: "'delayed' in ldm_reboot_check.stdout"
+
+# If running iambryant.solaris.ldom immediately after, this prevents errors from binding an guest LDOM immediately
+# after system startup
+- name: "Pause for 30 seconds to allow ldmd to initialize"
+  ansible.builtin.pause:
+    seconds: 30
